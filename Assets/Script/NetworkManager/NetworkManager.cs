@@ -12,7 +12,8 @@ using UnityEngine.Scripting;
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     private readonly string version = "prototype v0.11";
-    private string userId = "ChanHwi";
+    [SerializeField] GameObject nicknameWrite;
+    //private string userId;
 
 
     // 스크립트가 시작되자마자 실행됨
@@ -23,15 +24,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         // 같은 버전의 유저끼리 접속 허용
         PhotonNetwork.GameVersion = version;
-        // 유저에게 닉네임 할당
-        PhotonNetwork.NickName = userId;
+
+        // 유저에게 닉네임 할당 -> 버튼클릭시 할당으로 변경
+        //PhotonNetwork.NickName = userId;
 
         // Photon Server와 통신 횟수. 초당 60회
         PhotonNetwork.SendRate = 60;
         Debug.Log(PhotonNetwork.SendRate);
 
-        // Server Connect
-        PhotonNetwork.ConnectUsingSettings();
+        // Server Connect 버튼클릭시 연결으로 변경
+        //PhotonNetwork.ConnectUsingSettings();
 
      //   userWritedId = text.GetComponent<TextMeshPro>(); // ** 추후 아이디를 닉네임으로 쓰기위한 발판
         
@@ -91,15 +93,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
 
+    //////////////////////외부에서 접근하는 메소드///////////////////////////
+    
+    public void SetNickname()
+    {
+        PhotonNetwork.NickName = nicknameWrite.GetComponent<Text>().text;
     }
 }
