@@ -14,6 +14,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     private readonly string version = "prototype v0.11";
     [SerializeField] GameObject nicknameWrite;
     //private string userId;
+    [SerializeField] GameObject userMakePanel;
 
 
     // 스크립트가 시작되자마자 실행됨
@@ -51,7 +52,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         Debug.Log($"PhotonNetwork.InLobby = {PhotonNetwork.InLobby} In Lobby");
-        PhotonNetwork.JoinRandomRoom(); // 이미 만들어진 Room들 중 랜덤하게 Join
+        //PhotonNetwork.JoinRandomRoom(); // 이미 만들어진 Room들 중 랜덤하게 Join
+        // 
     }
 
     // JoinRandomRoom이 실패했을 경우 호출되는 콜백함수

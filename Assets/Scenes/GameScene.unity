@@ -1549,7 +1549,7 @@ GameObject:
   - component: {fileID: 1754888841}
   - component: {fileID: 1754888840}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: LobbyPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1642,6 +1642,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nicknameWrite: {fileID: 565374373}
+  userMakePanel: {fileID: 0}
 --- !u!4 &2030588156
 Transform:
   m_ObjectHideFlags: 0
