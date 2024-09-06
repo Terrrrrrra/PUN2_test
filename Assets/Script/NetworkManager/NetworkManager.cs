@@ -18,6 +18,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject nicknameWrite;
     //private string userId;
 
+    // 방 생성 관련 변수
+    [SerializeField] ScrollRect roomListScrollRect;
+    float space = 30f;
+    [SerializeField] GameObject miniRoomInfoPanelPrefab;
+    List<GameObject> miniRoomInfoPanelList = new List<GameObject>();
+
 
 
 
@@ -40,8 +46,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         // Server Connect 버튼클릭시 연결으로 변경
         //PhotonNetwork.ConnectUsingSettings();
 
-     //   userWritedId = text.GetComponent<TextMeshPro>(); // ** 추후 아이디를 닉네임으로 쓰기위한 발판
-        
+        //   userWritedId = text.GetComponent<TextMeshPro>(); // ** 추후 아이디를 닉네임으로 쓰기위한 발판
+
     }
 
     // Photon Server에 접속 후 호출되는 콜백 함수
@@ -108,5 +114,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void SetNickname()
     {
         PhotonNetwork.NickName = nicknameWrite.GetComponent<Text>().text;
+    }
+
+    public void AddNewRoomUi()
+    {
+        var newRoom = Instantiate(miniRoomInfoPanelPrefab, roomListScrollRect.content);
+        miniRoomInfoPanelList.Add(newRoom);
+
+        float y = 20f;
+        for (int i = 0; i < miniRoomInfoPanelList.Count; i++) {
+            RectTransform curMiniRoomInfoPanel = miniRoomInfoPanelList[i].GetComponent<RectTransform>();
+            curMiniRoomInfoPanel.anchoredPosition = new Vector2(0, -y);
+            y += curMiniRoomInfoPanel.sizeDelta.y + space;
+        }
+
+        roomListScrollRect.content.sizeDelta = new Vector2(roomListScrollRect.content.sizeDelta.x, y);
     }
 }
