@@ -24,6 +24,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject miniRoomInfoPanelPrefab;
     List<GameObject> miniRoomInfoPanelList = new List<GameObject>();
 
+    [SerializeField] Text roomName;
+
 
 
 
@@ -43,8 +45,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.SendRate = 60;
         Debug.Log(PhotonNetwork.SendRate);
 
-        // Server Connect 버튼클릭시 연결으로 변경
-        //PhotonNetwork.ConnectUsingSettings();
+        // Server Connect
+        PhotonNetwork.ConnectUsingSettings();
 
         //   userWritedId = text.GetComponent<TextMeshPro>(); // ** 추후 아이디를 닉네임으로 쓰기위한 발판
 
@@ -55,7 +57,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("Connected to Master");
         Debug.Log($"PhotonNetwork.InLobby = {PhotonNetwork.InLobby} In Server");
-        PhotonNetwork.JoinLobby(); // Lobby 입장
+        //PhotonNetwork.JoinLobby(); // Lobby 입장 -> 닉네임 설정 후 입장
     }
 
     // Lobby 입장 후 호출되는 콜백 함수
@@ -64,6 +66,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log($"PhotonNetwork.InLobby = {PhotonNetwork.InLobby} In Lobby");
         //PhotonNetwork.JoinRandomRoom(); // 이미 만들어진 Room들 중 랜덤하게 Join
         // 로비 UI로 이동
+        Debug.Log($"{PhotonNetwork.NickName} 님 환영합니다");
         makeUserUI.SetActive(false);
         lobbyUI.SetActive(true);
     }
@@ -114,11 +117,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void SetNickname()
     {
         PhotonNetwork.NickName = nicknameWrite.GetComponent<Text>().text;
+        PhotonNetwork.JoinLobby();
     }
 
     public void AddNewRoomUi()
     {
-        var newRoom = Instantiate(miniRoomInfoPanelPrefab, roomListScrollRect.content);
+        GameObject newRoom = Instantiate(miniRoomInfoPanelPrefab, roomListScrollRect.content);
         miniRoomInfoPanelList.Add(newRoom);
 
         float y = 20f;
@@ -129,5 +133,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         roomListScrollRect.content.sizeDelta = new Vector2(roomListScrollRect.content.sizeDelta.x, y);
+
+        MakeRoom(ref newRoom);
+    }
+
+    public void MakeRoom(ref GameObject curRoom)
+    {
+        PhotonNetwork.CreateRoom(roomName.text, new RoomOptions { MaxPlayers = 10 });
+        curRoom.transform.Find("RoomNamePanel")
+            .transform.Find("RoomName")
+            .GetComponent<Text>().text = roomName.text;
     }
 }
